@@ -9,7 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MainServlet extends HttpServlet {
 
@@ -23,6 +28,9 @@ public class MainServlet extends HttpServlet {
             "    Sounding board stuff: <input type = \"text\" name = \"board_stuff\" />\n" +
             "    <br />\n" +
             "    Price: <input type = \"number\" name = \"price\" />\n" +
+            "    <br />\n" +
+            "    Manufacture Date: <input type=\"date\" name = \"manufactureDate\" />" +
+            "    <br />\n" +
             "    <input type = \"submit\" value = \"Add guitar\" />\n" +
             "</form>\n" +
             "<form action = \"MainServlet\" method=\"GET\">\n" +
@@ -40,7 +48,14 @@ public class MainServlet extends HttpServlet {
         {
             String priceStr = request.getParameter("price");
             int price = priceStr.isEmpty() ? 0 : Integer.parseInt(priceStr);
-            guitarController.AddGuitar(request.getParameter("name"), price, request.getParameter("board_stuff"));
+            String dateStr = request.getParameter("manufactureDate");
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+            try {
+                guitarController.AddGuitar(request.getParameter("name"), price
+                        , request.getParameter("board_stuff"), format.parse(dateStr));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
 
         printHtmlPage(response, addGuitarPage);
@@ -75,6 +90,7 @@ public class MainServlet extends HttpServlet {
                 "        <th>Name</th>\n" +
                 "        <th>Sounding Board Stuff</th>\n" +
                 "        <th>Price</th>\n" +
+                "        <th>Manufacture date</th>\n" +
                 "    </tr>\n";
 
         for(Guitar guitar : guitars)
@@ -83,6 +99,7 @@ public class MainServlet extends HttpServlet {
                             "    <td>" + guitar.getName() + "</td>\n" +
                             "    <td>" + guitar.getSoundingBoardStuff() + "</td>\n" +
                             "    <td>" + guitar.getPrice() + "</td>\n" +
+                            "    <td>" + guitar.getManufatureDate().toString() + "</td>\n" +
                             "    </tr>\n";
         }
 

@@ -1,5 +1,6 @@
 package server;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class GuitarController {
         return guitars;
     }
 
-    public void AddGuitar(String name, int price, String soundingBoardStuff) {
-        guitars.add(new Guitar(name, price, soundingBoardStuff));
+    public void AddGuitar(String name, int price, String soundingBoardStuff, Date manufactureDate) {
+        guitars.add(new Guitar(name, price, soundingBoardStuff, manufactureDate));
     }
 }
