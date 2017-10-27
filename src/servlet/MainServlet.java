@@ -23,15 +23,15 @@ public class MainServlet extends HttpServlet {
             "<html lang=\"en\">\n" +
             "<body>\n" +
             "<form action = \"MainServlet\" method = \"POST\">\n" +
-            "    Guitar Name: <input type = \"text\" name = \"name\">\n" +
+            "    Guitar Name: <input type = \"text\" name = \"name\" required >\n" +
             "    <br />\n" +
             "    Sounding board stuff: <input type = \"text\" name = \"board_stuff\" />\n" +
             "    <br />\n" +
-            "    Price: <input type = \"number\" name = \"price\" />\n" +
+            "    Price: <input type = \"number\" min=\"0\" max=\"999999999\" name = \"price\" required />\n" +
             "    <br />\n" +
-            "    Manufacture Date: <input type=\"date\" name = \"manufactureDate\" />" +
+            "    Manufacture Date: <input type=\"date\" name = \"manufactureDate\" required />" +
             "    <br />\n" +
-            "    <input type = \"submit\" value = \"Add guitar\" />\n" +
+            "    <input type = \"submit\" id = \"addButton\" value = \"Add guitar\" />\n" +
             "</form>\n" +
             "<form action = \"MainServlet\" method=\"GET\">\n" +
             "    <input type = \"submit\" value = \"Show my guitars\" />\n" +

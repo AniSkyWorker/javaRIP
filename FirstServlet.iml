@@ -23,10 +23,31 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="file://$MODULE_DIR$/web/lib/jstl-1.2.jar!/" />
+          <root url="file://$MODULE_DIR$/web/lib/jstl-1.2.jar!" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Program Files/Java/selenium/libs/byte-buddy-1.7.5.jar!/" />
+          <root url="jar://C:/Program Files/Java/selenium/libs/commons-codec-1.10.jar!/" />
+          <root url="jar://C:/Program Files/Java/selenium/libs/commons-exec-1.3.jar!/" />
+          <root url="jar://C:/Program Files/Java/selenium/libs/commons-logging-1.2.jar!/" />
+          <root url="jar://C:/Program Files/Java/selenium/libs/gson-2.8.0.jar!/" />
+          <root url="jar://C:/Program Files/Java/selenium/libs/guava-23.0.jar!/" />
+          <root url="jar://C:/Program Files/Java/selenium/libs/httpclient-4.5.3.jar!/" />
+          <root url="jar://C:/Program Files/Java/selenium/libs/httpcore-4.4.6.jar!/" />
+          <root url="jar://C:/Program Files/Java/selenium/libs/jna-4.1.0.jar!/" />
+          <root url="jar://C:/Program Files/Java/selenium/libs/jna-platform-4.1.0.jar!/" />
+          <root url="jar://C:/Program Files/Java/selenium/client-combined-3.6.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://C:/Program Files/Java/selenium/client-combined-3.6.0-sources.jar!/" />
+        </SOURCES>
       </library>
     </orderEntry>
   </component>
