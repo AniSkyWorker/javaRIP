@@ -77,7 +77,7 @@ public class MainServletTest {
 
     private void OpenAddForm()
     {
-        webDriver.get("http://localhost:8080/MainServlet");
+        webDriver.get("http://localhost:8080/");
     }
 
     private void CheckAddGuitar(String name, String soundStuff, String price, String manufactureDate, Boolean isCorrect)
