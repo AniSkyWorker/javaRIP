@@ -1,26 +1,40 @@
 package server;
 
+import database.GuitarDatabase;
+
+import java.sql.SQLException;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 public class GuitarController {
-
-    private List<Guitar> guitars;
+    private GuitarDatabase database;
 
     public GuitarController() {
-        this.guitars = new LinkedList<Guitar>();
-    }
-
-    public void setGuitars(List<Guitar> guitars) {
-        this.guitars = guitars;
+        try {
+            Class.forName("com.nuodb.jdbc.Driver");
+            this.database = new GuitarDatabase();
+        } catch (Exception e) {
+            System.err.println( "Can`t connect to database");
+            e.printStackTrace();
+        }
     }
 
     public List<Guitar> getGuitars() {
-        return guitars;
+        try {
+            return database.getGuitars();
+        } catch (SQLException e) {
+            System.err.println( "Error while gettin guitar list from database");
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public void AddGuitar(String name, int price, String soundingBoardStuff, Date manufactureDate) {
-        guitars.add(new Guitar(name, price, soundingBoardStuff, manufactureDate));
+        try {
+            database.insertGuitar(new Guitar(name, price, soundingBoardStuff, manufactureDate));
+        } catch (SQLException e) {
+            System.err.println( "Error while add guitar to database");
+            e.printStackTrace();
+        }
     }
 }
