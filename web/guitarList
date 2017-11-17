@@ -1,0 +1,16 @@
+<html>
+<head>
+    <title>Here`s your guitars</title>
+</head>
+<body>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Sounding Board Stuff</th>
+        <th>Price</th>
+        <th>Manufacture date</th>
+    </tr>
+    ${guitarList}
+</table>
+</body>
+</html>

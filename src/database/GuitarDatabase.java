@@ -19,6 +19,7 @@ public class GuitarDatabase {
         properties.put("user", "guitarmaster");
         properties.put("password", "12345");
         properties.put("schema", "GUITAR");
+
         dbConnection = DriverManager.getConnection("jdbc:com.nuodb://localhost/guitar_base", properties);
     }
 
@@ -28,8 +29,9 @@ public class GuitarDatabase {
         stmt.setString(1, guitar.getName());
         stmt.setString(2, guitar.getSoundingBoardStuff());
         stmt.setInt(3, guitar.getPrice());
-        java.sql.Date sqlDate = new java.sql.Date(guitar.getManufatureDate().getTime());
+        java.sql.Date sqlDate = new java.sql.Date(guitar.getManufactureDate().getTime());
         stmt.setDate(4,sqlDate);
+
         stmt.addBatch();
         stmt.executeBatch();
         dbConnection.commit();

@@ -27,5 +27,5 @@ public class Guitar {
         return soundingBoardStuff;
     }
 
-    public Date getManufatureDate() { return manufactureDate; }
+    public Date getManufactureDate() { return manufactureDate; }
 }

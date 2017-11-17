@@ -41,7 +41,6 @@
         </SOURCES>
       </library>
     </orderEntry>
-    <orderEntry type="library" name="jstl-1.2" level="project" />
-    <orderEntry type="library" exported="" name="nuodbjdbc" level="project" />
+    <orderEntry type="library" name="nuodbjdbc" level="project" />
   </component>
 </module>
