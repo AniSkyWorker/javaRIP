@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
@@ -43,17 +44,20 @@ public class GuitarDatabase {
   public void insertGuitar(final Guitar guitar) throws SQLException {
     final PreparedStatement stmt = dbConnection.prepareStatement(
         "insert into guitars (name, soundingBoard, price, manufactureDate) values (?, ?, ?, ?)");
-    stmt.setString(1, guitar.getName());
-    stmt.setString(2, guitar.getSoundBoardStuff());
-    stmt.setInt(3, guitar.getPrice());
-    final java.sql.Date sqlDate = new java.sql.Date(guitar.getManufactureDate().getTime());
-    stmt.setDate(4, sqlDate);
 
-    stmt.addBatch();
-    stmt.executeBatch();
-    stmt.closeOnCompletion();
+    try {
+      stmt.setString(1, guitar.getName());
+      stmt.setString(2, guitar.getSoundBoardStuff());
+      stmt.setInt(3, guitar.getPrice());
+      final java.sql.Date sqlDate = new java.sql.Date(guitar.getManufactureDate().getTime());
+      stmt.setDate(4, sqlDate);
 
-    dbConnection.commit();
+      stmt.addBatch();
+      stmt.executeBatch();
+    } finally {
+      stmt.close();
+      dbConnection.commit();
+    }
   }
 
   /**
@@ -63,13 +67,28 @@ public class GuitarDatabase {
    */
   public List<Guitar> getGuitars() throws SQLException {
     final List<Guitar> guitars = new LinkedList<Guitar>();
-    final PreparedStatement pst = dbConnection.prepareStatement("select * from guitars");
-    final ResultSet resultGuitarSet = pst.executeQuery();
-    while (resultGuitarSet.next()) {
-      guitars.add(new Guitar(resultGuitarSet.getString(2),
-          resultGuitarSet.getInt(4), resultGuitarSet.getString(3), resultGuitarSet.getDate(5)));
+    PreparedStatement pst = null;
+    ResultSet resultGuitarSet = null;
+
+    try {
+      pst = dbConnection.prepareStatement("select * from guitars");
+      resultGuitarSet = pst.executeQuery();
+      while (resultGuitarSet.next()) {
+        Date manufactureDate = resultGuitarSet.getDate(5);
+        if (manufactureDate == null) {
+          manufactureDate = new Date();
+        }
+        guitars.add(new Guitar(resultGuitarSet.getString(2),
+            resultGuitarSet.getInt(4), resultGuitarSet.getString(3), manufactureDate));
+      }
+    } finally {
+      if (pst != null) {
+        pst.close();
+      }
+      if (resultGuitarSet != null) {
+        resultGuitarSet.close();
+      }
     }
-    resultGuitarSet.close();
     return guitars;
   }
 }

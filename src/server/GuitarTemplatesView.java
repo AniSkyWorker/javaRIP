@@ -1,6 +1,7 @@
 package server;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
@@ -23,9 +24,17 @@ public final class GuitarTemplatesView {
    * @throws IOException throws when have issues with html-template file
    */
   public static String getAddGuitarPage(final ServletContext context) throws IOException {
-    final BufferedReader buffer = new BufferedReader(new InputStreamReader(
-        context.getResourceAsStream("addGuitar")));
-    return buffer.lines().collect(Collectors.joining("\n"));
+    BufferedReader buffer = null;
+    String resultPage = "";
+    try {
+      buffer = new BufferedReader(new InputStreamReader(new FileInputStream(context.getRealPath("addGuitar")), "UTF-8"));
+      resultPage = buffer.lines().collect(Collectors.joining("\n"));
+    } finally {
+      if (buffer != null) {
+        buffer.close();
+      }
+    }
+    return resultPage;
   }
 
   /**
@@ -37,21 +46,29 @@ public final class GuitarTemplatesView {
    */
   public static String getGuitarListPage(final ServletContext context,
                                          final List<Guitar> guitarList) throws IOException {
-    final BufferedReader buffer = new BufferedReader(new InputStreamReader(
-        context.getResourceAsStream("guitarList")));
-    final String page = buffer.lines().collect(Collectors.joining("\n"));
+    BufferedReader buffer = null;
+    final StringBuffer contentBuffer = new StringBuffer(100);
+    String page = "";
 
-    String rowContent = "";
-    for (final Guitar guitar : guitarList) {
-      final String date = (guitar.getManufactureDate() == null)
-          ? "" : guitar.getManufactureDate().toString();
-      rowContent += "    <tr>\n"
-          + "    <td>" + guitar.getName() + "</td>\n"
-          + "    <td>" + guitar.getSoundBoardStuff() + "</td>\n"
-          + "    <td>" + guitar.getPrice() + "</td>\n"
-          + "    <td>" + date + "</td>\n"
-          + "    </tr>\n";
+    try {
+      buffer = new BufferedReader(new InputStreamReader(
+          new FileInputStream(context.getRealPath("guitarList")), "UTF-8"));
+      page = buffer.lines().collect(Collectors.joining("\n"));
+
+      for (final Guitar guitar : guitarList) {
+        final String date = guitar.getManufactureDate().toString();
+        contentBuffer.append("    <tr>\n"
+            + "    <td>" + guitar.getName() + "</td>\n"
+            + "    <td>" + guitar.getSoundBoardStuff() + "</td>\n"
+            + "    <td>" + guitar.getPrice() + "</td>\n"
+            + "    <td>" + date + "</td>\n"
+            + "    </tr>\n");
+      }
+    } finally {
+      if (buffer != null) {
+        buffer.close();
+      }
     }
-    return page.replace("${guitarList}", rowContent);
+    return page.replace("${guitarList}", contentBuffer.toString());
   }
 }

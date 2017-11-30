@@ -36,7 +36,7 @@ public class Guitar {
     this.name = name;
     this.price = price;
     this.soundBoardStuff = soundBoardStuff;
-    this.manufactureDate = manufactureDate;
+    this.manufactureDate = new Date(manufactureDate.getTime());
   }
 
   /**
@@ -68,6 +68,6 @@ public class Guitar {
    * @return Guitar manufacture date
    */
   public Date getManufactureDate() {
-    return manufactureDate;
+    return new Date(manufactureDate.getTime());
   }
 }
