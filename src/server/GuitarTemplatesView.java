@@ -8,7 +8,13 @@ import java.util.stream.Collectors;
 
 import javax.servlet.ServletContext;
 
-public class GuitarTemplatesView {
+/**
+ * Html template provider.
+ */
+public final class GuitarTemplatesView {
+
+  private GuitarTemplatesView(){
+  }
 
   /**
    * Return text file representing add guitar html-page.
@@ -16,8 +22,8 @@ public class GuitarTemplatesView {
    * @return String representing add guitar html-page
    * @throws IOException throws when have issues with html-template file
    */
-  public static String getAddGuitarPage(ServletContext context) throws IOException {
-    BufferedReader buffer = new BufferedReader(new InputStreamReader(
+  public static String getAddGuitarPage(final ServletContext context) throws IOException {
+    final BufferedReader buffer = new BufferedReader(new InputStreamReader(
         context.getResourceAsStream("addGuitar")));
     return buffer.lines().collect(Collectors.joining("\n"));
   }
@@ -29,19 +35,19 @@ public class GuitarTemplatesView {
    * @return String representing guitar list html-page
    * @throws IOException throws when have issues with html-template file
    */
-  public static String getGuitarListPage(ServletContext context,
-                                         List<Guitar> guitarList) throws IOException {
-    BufferedReader buffer = new BufferedReader(new InputStreamReader(
+  public static String getGuitarListPage(final ServletContext context,
+                                         final List<Guitar> guitarList) throws IOException {
+    final BufferedReader buffer = new BufferedReader(new InputStreamReader(
         context.getResourceAsStream("guitarList")));
-    String page = buffer.lines().collect(Collectors.joining("\n"));
+    final String page = buffer.lines().collect(Collectors.joining("\n"));
 
     String rowContent = "";
-    for (Guitar guitar : guitarList) {
-      String date = (guitar.getManufactureDate() == null)
+    for (final Guitar guitar : guitarList) {
+      final String date = (guitar.getManufactureDate() == null)
           ? "" : guitar.getManufactureDate().toString();
       rowContent += "    <tr>\n"
           + "    <td>" + guitar.getName() + "</td>\n"
-          + "    <td>" + guitar.getSoundingBoardStuff() + "</td>\n"
+          + "    <td>" + guitar.getSoundBoardStuff() + "</td>\n"
           + "    <td>" + guitar.getPrice() + "</td>\n"
           + "    <td>" + date + "</td>\n"
           + "    </tr>\n";

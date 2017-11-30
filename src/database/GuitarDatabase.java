@@ -11,15 +11,22 @@ import java.util.Properties;
 
 import server.Guitar;
 
+/**
+ * Object of guitar database aggregator.
+ */
 public class GuitarDatabase {
-  private final Connection dbConnection;
+
+  /**
+   * Store database driver connection.
+   */
+  private final transient Connection dbConnection;
 
   /**
    * Create object of guitar database aggregator.
-   * @throws Exception throws when can`t init connection to database
+   * @throws SQLException throws when can`t init connection to database
    */
-  public GuitarDatabase() throws Exception {
-    Properties properties = new Properties();
+  public GuitarDatabase() throws SQLException {
+    final Properties properties = new Properties();
     properties.put("user", "guitarmaster");
     properties.put("password", "12345");
     properties.put("schema", "GUITAR");
@@ -33,17 +40,19 @@ public class GuitarDatabase {
    * @param guitar Guitar model object
    * @throws SQLException throws when have an error with SQL request
    */
-  public void insertGuitar(Guitar guitar) throws SQLException {
-    PreparedStatement stmt = dbConnection.prepareStatement(
+  public void insertGuitar(final Guitar guitar) throws SQLException {
+    final PreparedStatement stmt = dbConnection.prepareStatement(
         "insert into guitars (name, soundingBoard, price, manufactureDate) values (?, ?, ?, ?)");
     stmt.setString(1, guitar.getName());
-    stmt.setString(2, guitar.getSoundingBoardStuff());
+    stmt.setString(2, guitar.getSoundBoardStuff());
     stmt.setInt(3, guitar.getPrice());
-    java.sql.Date sqlDate = new java.sql.Date(guitar.getManufactureDate().getTime());
+    final java.sql.Date sqlDate = new java.sql.Date(guitar.getManufactureDate().getTime());
     stmt.setDate(4, sqlDate);
 
     stmt.addBatch();
     stmt.executeBatch();
+    stmt.closeOnCompletion();
+
     dbConnection.commit();
   }
 
@@ -53,12 +62,14 @@ public class GuitarDatabase {
    * @throws SQLException throws when have an error with SQL request
    */
   public List<Guitar> getGuitars() throws SQLException {
-    List<Guitar> guitars = new LinkedList<Guitar>();
-    PreparedStatement pst = dbConnection.prepareStatement("select * from guitars");
-    ResultSet rs = pst.executeQuery();
-    while (rs.next()) {
-      guitars.add(new Guitar(rs.getString(2), rs.getInt(4), rs.getString(3), rs.getDate(5)));
+    final List<Guitar> guitars = new LinkedList<Guitar>();
+    final PreparedStatement pst = dbConnection.prepareStatement("select * from guitars");
+    final ResultSet resultGuitarSet = pst.executeQuery();
+    while (resultGuitarSet.next()) {
+      guitars.add(new Guitar(resultGuitarSet.getString(2),
+          resultGuitarSet.getInt(4), resultGuitarSet.getString(3), resultGuitarSet.getDate(5)));
     }
+    resultGuitarSet.close();
     return guitars;
   }
 }

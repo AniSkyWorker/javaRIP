@@ -11,40 +11,57 @@ import javax.servlet.http.HttpServletResponse;
 import server.GuitarController;
 import server.GuitarTemplatesView;
 
+/**
+ * Main Servlet object initiate add and show guitars routing.
+ */
 public class MainServlet extends HttpServlet {
 
-  private GuitarController guitarController = new GuitarController();
+  /**
+   * Controller of guitar model objects.
+   */
+  private final transient GuitarController guitarController = new GuitarController();
 
-  protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+  /**
+   * Route add guitar page.
+   * @param request Client request
+   * @param response Method response
+   */
+  protected void doPost(final HttpServletRequest request, final HttpServletResponse response) {
     if (request.getAttribute("showAddGuitarPage") == null) {
       guitarController.addGuitar(request.getParameter("name"), request.getParameter("price"),
           request.getParameter("board_stuff"), request.getParameter("manufactureDate"));
     }
     try {
       printHtmlPage(response, GuitarTemplatesView.getAddGuitarPage(getServletContext()));
-    } catch (Exception e) {
-      GuitarController.log.log(Level.SEVERE, "Error during request on POST method", e);
+    } catch (IOException e) {
+      guitarController.log(Level.SEVERE, "Error during request on POST method", e);
     }
   }
 
-  protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+  /**
+   * Route show guitar list page.
+   * @param request Client request
+   * @param response Method response
+   */
+  protected void doGet(final HttpServletRequest request, final HttpServletResponse response) {
     try {
 
-      if (request.getParameter("show_guitars") != null) {
-        printHtmlPage(response, GuitarTemplatesView.getGuitarListPage(getServletContext(),
-            guitarController.getGuitars()));
-      } else {
+      if (request.getParameter("show_guitars") == null) {
         request.setAttribute("showAddGuitarPage", true);
         doPost(request, response);
+      } else {
+        printHtmlPage(response, GuitarTemplatesView.getGuitarListPage(getServletContext(),
+            guitarController.getGuitars()));
       }
-    } catch (Exception e) {
-      GuitarController.log.log(Level.SEVERE, "Error during request on GET method", e);
+    } catch (IOException e) {
+      guitarController.log(Level.SEVERE, "Error during request on GET method", e);
     }
   }
 
-  private void printHtmlPage(HttpServletResponse response, String page) throws IOException {
+  private void printHtmlPage(final HttpServletResponse response,
+                             final String page) throws IOException {
     response.setContentType("text/html");
-    PrintWriter out = response.getWriter();
+    final PrintWriter out = response.getWriter();
     out.print(page);
     out.flush();
   }

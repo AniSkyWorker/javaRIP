@@ -11,9 +11,19 @@ import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Object that operate with guitar models.
+ */
 public class GuitarController {
-  private GuitarDatabase database;
-  public static Logger log = Logger.getLogger(GuitarController.class.getName());
+
+  /**
+   * Database aggregator.
+   */
+  private transient GuitarDatabase database;
+  /**
+   * Main logger.
+   */
+  private static final transient Logger LOGGER = Logger.getLogger(GuitarController.class.getName());
 
   /**
    * Create instance of guitar controller, that operate with guitar models.
@@ -22,8 +32,8 @@ public class GuitarController {
     try {
       Class.forName("com.nuodb.jdbc.Driver");
       this.database = new GuitarDatabase();
-    } catch (Exception e) {
-      log.log(Level.SEVERE, "Can`t connect to database", e);
+    } catch (SQLException | ClassNotFoundException exception) {
+      LOGGER.log(Level.SEVERE, "Can`t connect to database", exception);
     }
   }
 
@@ -32,31 +42,43 @@ public class GuitarController {
    * @return List of guitar model objects
    */
   public List<Guitar> getGuitars() {
+    List<Guitar> guitarList = null;
     try {
-      return database.getGuitars();
+      guitarList = database.getGuitars();
     } catch (SQLException e) {
-      log.log(Level.WARNING, "Error while gettin guitar list from database", e);
-      return null;
+      LOGGER.log(Level.WARNING, "Error while gettin guitar list from database", e);
     }
+    return guitarList;
   }
 
   /**
    * Add guitar to database.
    * @param name Name o guitar
    * @param priceStr Guitar price
-   * @param soundingBoardStuff Guitar board stuff type
+   * @param soundBoardStuff Guitar board stuff type
    * @param dateStr Manufacture date of guitar
    */
-  public void addGuitar(String name, String priceStr, String soundingBoardStuff, String dateStr) {
+  public void addGuitar(final String name, final String priceStr,
+                        final String soundBoardStuff, final String dateStr) {
     try {
-      int price = priceStr.isEmpty() ? 0 : Integer.parseInt(priceStr);
-      DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+      final int price = priceStr.isEmpty() ? 0 : Integer.parseInt(priceStr);
+      final DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
-      database.insertGuitar(new Guitar(name, price, soundingBoardStuff, format.parse(dateStr)));
+      database.insertGuitar(new Guitar(name, price, soundBoardStuff, format.parse(dateStr)));
     } catch (SQLException e) {
-      log.log(Level.SEVERE, "Error while insert guitar into database", e);
+      LOGGER.log(Level.SEVERE, "Error while insert guitar into database", e);
     } catch (ParseException e) {
-      log.log(Level.WARNING, "Incorrect data str", e);
+      LOGGER.log(Level.WARNING, "Incorrect data str", e);
     }
+  }
+
+  /**
+   * Log the message and exception info.
+   * @param logLevel Level of log
+   * @param logMessage Log Message
+   * @param exception Exception to log
+   */
+  public void log(final Level logLevel, final String logMessage, final Exception exception) {
+    LOGGER.log(logLevel, logMessage, exception);
   }
 }

@@ -4,16 +4,22 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+/**
+ * MainServlet tests object.
+ */
 public class MainServletTest {
 
-  private ChromeDriver webDriver = new ChromeDriver();
+  /**
+   * Testing-browser driver.
+   */
+  private final transient ChromeDriver webDriver = new ChromeDriver();
 
   /**
    * Start MainServlet tests.
    * @param args Not used
    */
-  public static void main(String[] args) {
-    MainServletTest mainServletTests = new MainServletTest();
+  public static void main(final String[] args) {
+    final MainServletTest mainServletTests = new MainServletTest();
     mainServletTests.testNameField();
     mainServletTests.testSoundingBoardStuffField();
     mainServletTests.testPriceField();
@@ -77,14 +83,14 @@ public class MainServletTest {
     webDriver.get("http://localhost:8080/MainServlet");
   }
 
-  private void checkAddGuitar(String name, String soundStuff, String price,
-                              String manufactureDate, Boolean isCorrect) {
+  private void checkAddGuitar(final String name, final String soundStuff, final String price,
+                              final String manufactureDate, final Boolean isCorrect) {
     setInputInfo("name", name, name);
     setInputInfo("board_stuff", soundStuff, soundStuff);
     setInputInfo("price", price, price);
     setInputInfo("manufactureDate", manufactureDate, manufactureDate);
 
-    WebElement addButton = webDriver.findElement(By.id("addButton"));
+    final WebElement addButton = webDriver.findElement(By.id("addButton"));
     addButton.click();
 
     if (webDriver.findElements(By.cssSelector("input:invalid")).isEmpty() && !isCorrect) {
@@ -92,12 +98,13 @@ public class MainServletTest {
     }
   }
 
-  private void setInputInfo(String elementId, String info, String excpectedInfo) {
-    WebElement inputElem = webDriver.findElement(By.xpath("//input[@name='" + elementId + "']"));
+  private void setInputInfo(final String elementId, final String info, final String excpectedInfo) {
+    final WebElement inputElem = webDriver.findElement(
+        By.xpath("//input[@name='" + elementId + "']"));
     inputElem.sendKeys(info);
-    String currentText = inputElem.getAttribute("value");
+    final String currentText = inputElem.getAttribute("value");
     if (!currentText.equals(excpectedInfo)) {
-      WebElement addButton = webDriver.findElement(By.id("addButton"));
+      final WebElement addButton = webDriver.findElement(By.id("addButton"));
       addButton.click();
       if (inputElem.getAttribute("invalid") != null) {
         throw new Error("Expected " + excpectedInfo + "but " + currentText + "given!");
