@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Here`s your guitars</title>
+</head>
+<body>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Sounding Board Stuff</th>
+        <th>Price</th>
+        <th>Manufacture date</th>
+    </tr>
+
+    <th:block th:each="guitar : ${guitarList}">
+        <tr>
+            <td th:text="${guitar.name}">...</td>
+            <td th:text="${guitar.soundBoardStuff}">...</td>
+            <td th:text="${guitar.price}">...</td>
+            <td th:text="${guitar.getManufactureDate().toString()}">...</td>
+        </tr>
+    </th:block>
+</table>
+</body>
+</html>
