@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import server.GuitarController;
 
+/**
+ * Main controller of application
+ */
 @Controller
 public class MainController {
 
@@ -20,10 +23,10 @@ public class MainController {
    * Route add guitar page.
    */
   @RequestMapping(value = "/MainServlet", method = RequestMethod.POST)
-  public String addGuitar(Model model, @RequestParam(value = "name", required = false) String name,
-                          @RequestParam(value = "price", required = false) String price,
-                          @RequestParam(value = "board_stuff", required = false) String boardStuff,
-                          @RequestParam(value = "manufactureDate", required = false) String manufactureDate) {
+  public String addGuitar(final Model model, @RequestParam(value = "name", required = false) final String name,
+                          @RequestParam(value = "price", required = false) final String price,
+                          @RequestParam(value = "board_stuff", required = false)final String boardStuff,
+                          @RequestParam(value = "manufactureDate", required = false) final String manufactureDate) {
     if (name != null) {
       guitarController.addGuitar(name, price, boardStuff, manufactureDate);
     }
@@ -34,12 +37,13 @@ public class MainController {
    * Route show guitar list page.
    */
   @RequestMapping(value = "/MainServlet", method = RequestMethod.GET)
-  public String showGuitarList(Model model, @RequestParam(value = "show_guitars", required = false) String showGuitars) {
-      if (showGuitars == null) {
-        return addGuitar(model, null, null, null,null);
-      } else {
-        model.addAttribute("guitarList", guitarController.getGuitars());
-        return "guitarList";
-      }
+  public String showGuitarList(final Model model,
+                               @RequestParam(value = "show_guitars", required = false) final String showGuitars) {
+    if (showGuitars == null) {
+      return addGuitar(model, null, null, null,null);
+    } else {
+      model.addAttribute("guitarList", guitarController.getGuitars());
+      return "guitarList";
+    }
   }
 }
