@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Here`s your guitars</title>
+    <title th:text="#{guitarlist.title}"></title>
 </head>
 <body>
 <table>
     <tr>
-        <th>Name</th>
-        <th>Sounding Board Stuff</th>
-        <th>Price</th>
-        <th>Manufacture date</th>
+        <th th:text="#{guitarlist.name}"></th>
+        <th th:text="#{guitarlist.boardstuff}"></th>
+        <th th:text="#{guitarlist.price}"></th>
+        <th th:text="#{guitarlist.date}"></th>
     </tr>
 
     <th:block th:each="guitar : ${guitarList}">
