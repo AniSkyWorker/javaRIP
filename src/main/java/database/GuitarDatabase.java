@@ -9,24 +9,31 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Component;
 import server.Guitar;
 
 /**
  * Object of guitar database aggregator.
  */
+@Component
 public class GuitarDatabase {
 
   /**
    * Store database driver connection.
    */
   private final transient Connection dbConnection;
+  private Logger logger;
 
   /**
    * Create object of guitar database aggregator.
    * @throws SQLException throws when can`t init connection to database
    */
-  public GuitarDatabase() throws SQLException {
+  public GuitarDatabase(Logger loggerRef) throws SQLException {
+    logger = loggerRef;
     final Properties properties = new Properties();
     properties.put("user", "guitarmaster");
     properties.put("password", "12345");
@@ -41,11 +48,13 @@ public class GuitarDatabase {
    * @param guitar Guitar model object
    * @throws SQLException throws when have an error with SQL request
    */
+  @Async
   public void insertGuitar(final Guitar guitar) throws SQLException {
     final PreparedStatement stmt = dbConnection.prepareStatement(
         "insert into guitars (name, soundingBoard, price, manufactureDate) values (?, ?, ?, ?)");
 
     try {
+      logger.log(Level.INFO, "Start database inserting");
       stmt.setString(1, guitar.getName());
       stmt.setString(2, guitar.getSoundBoardStuff());
       stmt.setInt(3, guitar.getPrice());

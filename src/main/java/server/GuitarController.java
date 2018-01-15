@@ -1,6 +1,7 @@
 package server;
 
 import database.GuitarDatabase;
+import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -14,6 +15,7 @@ import java.util.logging.Logger;
 /**
  * Object that operate with guitar models.
  */
+@Component
 public class GuitarController {
 
   /**
@@ -31,7 +33,7 @@ public class GuitarController {
   public GuitarController() {
     try {
       Class.forName("com.nuodb.jdbc.Driver");
-      this.database = new GuitarDatabase();
+      this.database = new GuitarDatabase(LOGGER);
     } catch (SQLException | ClassNotFoundException exception) {
       LOGGER.log(Level.SEVERE, "Can`t connect to database", exception);
     }
